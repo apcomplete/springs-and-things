@@ -6,8 +6,7 @@ const Graph = React.createClass({
   render() {
     let vertices = this.props.outlets.map((vertex, idx) => {
       return (
-        <Vertex x={vertex.x} y={vertex.y} key={idx}>
-        </Vertex>
+        <Vertex x={vertex.x} y={vertex.y} key={idx} />
       );
     });
 
