@@ -7,9 +7,12 @@
   },
   "dependencies": {
     "konva": "^1.1.0",
+    "lodash": "^4.15.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "react-konva": "^1.0.5"
+    "react-konva": "^1.0.5",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
