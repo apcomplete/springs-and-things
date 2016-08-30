@@ -1,15 +1,23 @@
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { Stage } from 'react-konva';
-import Graph from './graph';
-import outlets from './points';
+
+import Graph from './components/graph';
+import vertices from './points';
+import reducers from './reducers';
 import './App.css';
+
+const store = createStore(reducers, vertices);
 
 export default React.createClass({
   render() {
     return (
-      <Stage ref="stage" width="2100" height="1500">
-        <Graph outlets={outlets} />
-      </Stage>
+      <Provider store={store}>
+        <Stage ref="stage" width="2100" height="1500">
+          <Graph />
+        </Stage>
+      </Provider>
     );
   }
 });

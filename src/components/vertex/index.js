@@ -1,20 +1,24 @@
 import React from 'react';
 import { Group } from 'react-konva';
 import Portrait from './portrait';
+import { NORMAL_STATE, HOVERED_STATE, SELECTED_STATE } from '../../constants';
 
 const Vertex = React.createClass({
   getInitialState() {
     return {
-      status: 'normal'
+      status: NORMAL_STATE
     };
   },
 
-  updateStatus(status) {
-    if (this.state.status === status) return;
-    this.setState({ status: status });
-    switch (status) {
-      case 'clicked':
-      case 'hovered':
+  componentWillReceiveProps(nextProps) {
+    if (this.props.status === nextProps.status) return;
+    this.setState({ status: nextProps.status });
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    switch (nextState.status) {
+      case SELECTED_STATE:
+      case HOVERED_STATE:
         this.inflate();
         break;
       default:
@@ -23,24 +27,22 @@ const Vertex = React.createClass({
   },
 
   reset() {
-    this.updateStatus('normal');
+    this.setState({ status: NORMAL_STATE});
   },
 
   onClick() {
     this.props.handleClick();
-    let newStatus = this.state.status === 'clicked' ? 'normal' : 'clicked';
-    this.updateStatus(newStatus);
   },
 
   onMouseEnter() {
-    if (this.state.status === 'normal') {
-      this.updateStatus('hovered');
+    if (this.state.status === NORMAL_STATE) {
+      this.setState({ status: HOVERED_STATE});
     }
   },
 
   onMouseLeave() {
-    if (this.state.status === 'hovered') {
-      this.updateStatus('normal');
+    if (this.state.status === HOVERED_STATE) {
+      this.setState({ status: NORMAL_STATE});
     }
   },
 

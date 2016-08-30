@@ -1,57 +1,68 @@
 export default [
   {
-    //1
+    id: 1,
     x: 50,
-    y: 200
+    y: 200,
+    status: 'normal'
   },
   {
-    //2
+    id: 2,
     x: 1500,
-    y: 250
+    y: 250,
+    status: 'normal'
   },
   {
-    //3
+    id: 3,
     x: 60,
-    y: 550
+    y: 550,
+    status: 'normal'
   },
   {
-    //4
+    id: 4,
     x: 1400,
-    y: 600
+    y: 600,
+    status: 'normal'
   },
   {
-    //5
+    id: 5,
     x: 1900,
-    y: 650
+    y: 650,
+    status: 'normal'
   },
   {
-    //6
+    id: 6,
     x: 250,
-    y: 895
+    y: 895,
+    status: 'normal'
   },
   {
-    //7
+    id: 7,
     x: 750,
-    y: 750
+    y: 750,
+    status: 'normal'
   },
   {
-    //8
+    id: 8,
     x: 1150,
-    y: 1000
+    y: 1000,
+    status: 'normal'
   },
   {
-    //9
+    id: 9,
     x: 1700,
-    y: 1200
+    y: 1200,
+    status: 'normal'
   },
   {
-    //10
+    id: 10,
     x: 500,
-    y: 1300
+    y: 1300,
+    status: 'normal'
   },
   {
-    //11
+    id: 11,
     x: 740,
-    y: 200
+    y: 200,
+    status: 'normal'
   }
 ];
