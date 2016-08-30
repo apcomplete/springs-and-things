@@ -22,7 +22,12 @@ const Vertex = React.createClass({
     }
   },
 
+  reset() {
+    this.updateStatus('normal');
+  },
+
   onClick() {
+    this.props.handleClick();
     let newStatus = this.state.status === 'clicked' ? 'normal' : 'clicked';
     this.updateStatus(newStatus);
   },
