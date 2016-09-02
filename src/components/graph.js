@@ -1,22 +1,93 @@
 import React from 'react';
 import { Rect, Layer } from 'react-konva';
+import { Animation } from 'konva';
 import { connect } from 'react-redux';
 
+import Vector, { calculatePosition, euclideanDistance } from '../util/vector.model';
 import Vertex from './vertex';
-import { toggleVertex } from '../actions';
+import { clickVertex, hoverVertex, leaveVertex, moveVertex } from '../actions';
+
+const TIME_STEP = 0.2
 
 const Graph = React.createClass({
-  onVertexClick(idx) {
-    let vertex = this.state.vertices[idx];
-    this.panTo(vertex);
+  getInitialState() {
+    return { edges: this.generateEdges() };
   },
 
-  panTo(vertex) {
-    this.refs.graph.getStage().to({
-      x: document.body.clientWidth/2-vertex.props.x-600/2,
-      y: document.body.clientHeight/2-vertex.props.y-400/2,
-      duration: 0.5
+  componentDidMount() {
+    let anim = new Animation(frame => {
+      this.applyCoulombsLaw()
+      this.applyHookesLaw()
+      this.props.vertices.forEach(v => {
+        let newPosition = calculatePosition(v, TIME_STEP);
+        this.props.updatePosition(v, newPosition);
+      });
+    }, this.refs.graph);
+
+    anim.start();
+  },
+
+  generateEdges() {
+    let edges = [];
+    this.props.vertices.forEach(v => {
+      this.props.vertices.forEach(u => {
+        if (v !== u) {
+          edges.push({
+            src: u,
+            dest: v,
+            length: euclideanDistance(u, v).magnitude()
+          });
+        }
+      });
     });
+    return edges;
+  },
+
+  /*
+  Coulomb's Law: F = k*|q1*q2|/r^2
+  In our case k*|q1*q2| is replaced with the constant REPULSION, since all
+  particles have the same charge.
+  */
+  applyCoulombsLaw() {
+    this.props.vertices.forEach(v => {
+      this.props.vertices.forEach(u => {
+        if (v !== u) {
+          let vPosition = { x: v.x, y: v.y };
+          let uPosition = { x: u.x, y: u.y };
+          let distanceVector = euclideanDistance(vPosition, uPosition);
+          let distance = distanceVector.magnitude() + 0.1;
+          let direction = distanceVector.normalize();
+
+          //In accordance with Newton's 3rd Law of Motion, F2 = -F1, force must be applied to both particles
+          let force = direction.multiply(this.props.repulsion).divide(distance * distance * 5*Math.pow(10,-7));
+          this.applyForce(v, force);
+          this.applyForce(u, force.multiply(-1));
+        }
+      });
+    });
+  },
+
+  /*
+  Hooke's Law: F = kX where X is displacement of the spring from it's original length.
+  */
+  applyHookesLaw() {
+    this.state.edges.forEach(edge => {
+      let u = edge.src;
+      let v = edge.dest;
+      let length = edge.length;
+
+      let d = euclideanDistance(u, v);
+      let displacement = length - d.magnitude();
+      let direction = d.normalize();
+      //Same as above, Newton's 3rd Law of Motion, F2 = -F1
+      let force = direction.multiply(this.props.springConstant * displacement);
+      this.applyForce(u, force);
+      this.applyForce(v, force.multiply(-1));
+    });
+  },
+
+  applyForce(vertex, force) {
+    vertex.acceleration = vertex.acceleration.add(force);
   },
 
   render() {
