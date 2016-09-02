@@ -25,6 +25,8 @@ const getLeaveRepulsion = (state, action) => {
 
 const repulsion = (state = {}, action) => {
   switch (action.type) {
+    case 'CLICK_VERTEX':
+      return 200;
     case 'LEAVE_VERTEX':
       return getLeaveRepulsion(state, action);
     case 'HOVER_VERTEX':
