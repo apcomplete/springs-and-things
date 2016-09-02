@@ -6,8 +6,17 @@ import { NORMAL_STATE, HOVERED_STATE, SELECTED_STATE } from '../../constants';
 const Vertex = React.createClass({
   getInitialState() {
     return {
+      initialX: 0,
+      initialY: 0,
       status: NORMAL_STATE
     };
+  },
+
+  componentDidMount() {
+    this.setState({
+      initialX: this.props.x,
+      initialY: this.props.y
+    });
   },
 
   componentWillReceiveProps(nextProps) {
@@ -33,8 +42,8 @@ const Vertex = React.createClass({
 
   panTo() {
     this.refs.vertex.getStage().to({
-      x: document.body.clientWidth/2-this.props.x,
-      y: document.body.clientHeight/2-this.props.y,
+      x: document.body.clientWidth/2-this.state.initialX,
+      y: document.body.clientHeight/2-this.state.initialY,
       duration: 0.5
     });
   },
