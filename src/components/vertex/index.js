@@ -11,23 +11,32 @@ const Vertex = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.status === nextProps.status) return;
-    this.setState({ status: nextProps.status });
+    if (this.props.status !== nextProps.status) {
+      this.setState({ status: nextProps.status });
+    };
   },
 
   componentWillUpdate(nextProps, nextState) {
-    switch (nextState.status) {
-      case SELECTED_STATE:
-      case HOVERED_STATE:
-        this.inflate();
-        break;
-      default:
-        this.deflate();
+    this.refs.vertex.position(nextProps);
+    if (nextState.status !== this.state.status) {
+      switch (nextState.status) {
+        case SELECTED_STATE:
+          this.panTo();
+        case HOVERED_STATE:
+          this.inflate();
+          break;
+        default:
+          this.deflate();
+      }
     }
   },
 
-  reset() {
-    this.setState({ status: NORMAL_STATE});
+  panTo() {
+    this.refs.vertex.getStage().to({
+      x: document.body.clientWidth/2-this.props.x-600/2,
+      y: document.body.clientHeight/2-this.props.y-400/2,
+      duration: 0.5
+    });
   },
 
   onClick() {
@@ -35,15 +44,11 @@ const Vertex = React.createClass({
   },
 
   onMouseEnter() {
-    if (this.state.status === NORMAL_STATE) {
-      this.setState({ status: HOVERED_STATE});
-    }
+    this.props.handleMouseEnter();
   },
 
   onMouseLeave() {
-    if (this.state.status === HOVERED_STATE) {
-      this.setState({ status: NORMAL_STATE});
-    }
+    this.props.handleMouseLeave();
   },
 
   inflate() {

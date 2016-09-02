@@ -99,7 +99,9 @@ const Graph = React.createClass({
           status={vertex.status}
           key={vertex.id}
           acceleration={new Vector()}
-          handleClick={this.props.onVertexClick.bind(this, vertex)}
+          handleClick={this.props.clickVertex.bind(this, vertex)}
+          handleMouseEnter={this.props.hoverVertex.bind(this, vertex)}
+          handleMouseLeave={this.props.leaveVertex.bind(this, vertex)}
         />
       );
     });
@@ -114,13 +116,22 @@ const Graph = React.createClass({
 });
 
 const mapStateToProps = (state) => {
-  return { vertices: state };
+  return state;
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onVertexClick: (vertex) => {
-      dispatch(toggleVertex(vertex));
+    clickVertex: (vertex) => {
+      dispatch(clickVertex(vertex));
+    },
+    hoverVertex: (vertex) => {
+      dispatch(hoverVertex(vertex));
+    },
+    leaveVertex: (vertex) => {
+      dispatch(leaveVertex(vertex));
+    },
+    updatePosition: (vertex, position) => {
+      dispatch(moveVertex(vertex, position));
     }
   }
 }

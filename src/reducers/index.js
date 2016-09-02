@@ -1,34 +1,11 @@
 import _ from 'lodash';
-import { NORMAL_STATE, SELECTED_STATE } from '../constants';
+import vertices from './vertices';
+import repulsion from './repulsion';
 
-const updateStatus = (state, status) => {
-  return _.extend(state, { status: status });
-}
-
-const toggleVertex = (state, action) => {
-  let status = SELECTED_STATE;
-  if (state.id !== action.id || state.status === SELECTED_STATE) {
-    status = NORMAL_STATE;
-  }
-  return updateStatus(state, status);
-}
-
-const vertex = (state = {}, action) => {
-  switch (action.type) {
-    case 'TOGGLE_VERTEX':
-      return toggleVertex(state, action);
-    default:
-      return state;
-  }
-}
-
-const vertices = (state = {}, action) => {
-  switch (action.type) {
-    case 'TOGGLE_VERTEX':
-      return state.map(v => vertex(v, action));
-    default:
-      return state;
-  }
+const combineReducers = (state = { vertices: [], repulsion: 1 }, action) => {
+  state.vertices = vertices(state.vertices, action);
+  state.repulsion = repulsion(state, action);
+  return _.extend({}, state);
 };
 
-export default vertices;
+export default combineReducers;

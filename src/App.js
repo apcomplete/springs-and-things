@@ -8,7 +8,11 @@ import vertices from './points';
 import reducers from './reducers';
 import './App.css';
 
-const store = createStore(reducers, vertices);
+const store = createStore(reducers, {
+  vertices: vertices,
+  repulsion: 1,
+  springConstant: 1
+});
 
 export default React.createClass({
   render() {
