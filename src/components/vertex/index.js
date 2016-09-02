@@ -33,8 +33,8 @@ const Vertex = React.createClass({
 
   panTo() {
     this.refs.vertex.getStage().to({
-      x: document.body.clientWidth/2-this.props.x-600/2,
-      y: document.body.clientHeight/2-this.props.y-400/2,
+      x: document.body.clientWidth/2-this.props.x,
+      y: document.body.clientHeight/2-this.props.y,
       duration: 0.5
     });
   },
